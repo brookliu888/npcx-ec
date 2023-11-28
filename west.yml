@@ -1,0 +1,34 @@
+west:
+  url: https://github.com/zephyrproject-rtos/west
+  version: v0.7.2
+
+manifest:
+  remotes:
+    - name: zephyrproject
+      url-base: https://github.com/zephyrproject-rtos 
+    - name: zephyrproject_nuvoton
+      url-base: https://github.com/Nuvoton-EC
+
+  projects:
+    - name: zephyr-npck
+      path: zephyr
+      remote: zephyrproject_nuvoton
+      revision: npcx_k3_1025
+      # clone-depth: 1
+      west-commands: scripts/west-commands.yml
+
+    - name: cmsis
+      remote: zephyrproject
+      revision: 4b96cbb174678dcd3ca86e11e1f24bc5f8726da0
+      path: modules/hal/cmsis
+      groups:
+        - hal
+    - name: hal_microchip
+      remote: zephyrproject
+      revision: 5d079f1683a00b801373bbbbf5d181d4e33b30d5
+      path: modules/hal/microchip
+      groups:
+        - hal
+
+  self:
+    path: lnv-npcx-zephyr

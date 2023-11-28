@@ -1,0 +1,16 @@
+# Nuvoton Cortex-M4 Embedded Controller
+
+# Copyright (c) 2023 Nuvoton Technology Corporation.
+# SPDX-License-Identifier: Apache-2.0
+
+menu "Drivers"
+
+config LNV_SYSTEM
+	bool "Lenovo system driver"
+	default y
+	help
+	  Enable Lenovo system driver
+
+rsource "lnv_system/Kconfig"
+
+endmenu

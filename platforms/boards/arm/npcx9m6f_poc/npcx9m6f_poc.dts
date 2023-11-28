@@ -1,0 +1,85 @@
+/*
+ * Copyright (c) 2022 Nuvoton Technology Corporation.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+
+#include <dt-bindings/gpio_defines.h>
+#include <nuvoton/npcx9m6f.dtsi>
+#include "npcx9m6f_poc-pinctrl.dtsi"
+/ {
+	model = "Nuvoton NPCX9M6F evaluation board";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,console = &uart1;
+		zephyr,shell-uart = &uart1;
+		zephyr,flash = &flash0;
+	};
+
+	aliases {
+		/* Put DT_ALIAS here */
+	};
+
+	poc-gpio {
+		compatible = "poc-gpios";
+		gpio_pulse_out: pulse_out {
+			gpios = <&gpioa 5 GPIO_OUTPUT_HIGH>;
+		};
+
+		gpio_pulse_in: pulse_in {
+			gpios = <&gpioc 7 GPIO_INPUT>;
+		};
+
+		gpio_observe_out: observe_out {
+			gpios = <&gpioc 5 GPIO_OUTPUT_HIGH>;
+		};
+	};
+
+	poc-leds-pwm {
+		compatible = "pwm-leds";
+		pwm_led0_green: pwm_led_0 {
+			pwms = <&pwm6 0 PWM_MSEC(200) PWM_POLARITY_INVERTED>;
+			label = "User D7 green";
+		};
+	};
+
+	hibernate_ctrl_psl: hibernate-ctrl-psl {
+		compatible = "npcx-hibernate-psl";
+		psl-driven-type = "gpio-driven";
+		status = "disabled";
+	};
+};
+
+/* Overwrite default device properties with overlays in board dt file here. */
+&uart1 {
+	status = "okay";
+	current-speed = <115200>;
+	/* Use UART1_SL2 ie. PIN64.65 */
+	pinctrl-0 = <&uart1_2_sin_gp64
+		     &uart1_2_sout_gp65>;
+	pinctrl-names = "default";
+};
+
+&pwm6 {
+	status = "okay";
+	pinctrl-0 = <&pwm6_gpc0>;
+	pinctrl-names = "default";
+};
+
+/* Power switch logic input pads */
+&psl_in2_gp00 {
+	/* ACOK_OD */
+	psl-in-mode = "edge";
+	psl-in-pol = "high-rising";
+};
+
+/* Power domain device controlled by PSL (Power Switch Logic) IO pads */
+&hibernate_ctrl_psl {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&psl_in2_gp00>;
+	enable-gpios = <&gpio8 5 0>; /* PSL_OUT is fixed to GPIO85 */
+};

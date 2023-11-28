@@ -1,0 +1,108 @@
+/*
+ * Copyright (c) 2022 Nuvoton Technology Corporation.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+
+#include <dt-bindings/gpio_defines.h>
+#include <nuvoton/npck3m7k.dtsi>
+#include "npck3m7k_poc-pinctrl.dtsi"
+
+/ {
+	model = "Nuvoton NPCK3M7K evaluation board";
+
+	chosen {
+		zephyr,flash = &flash0;
+		zephyr,sram = &sram0;
+		zephyr,console = &uart1;
+		zephyr,shell-uart = &uart1;
+	};
+
+	aliases {
+		/* Put DT_ALIAS here */
+	};
+
+
+	poc-gpio {
+		compatible = "poc-gpios";
+		gpio_pulse_out: pulse_out {
+			gpios = <&gpioa 5 GPIO_OUTPUT_HIGH>;
+		};
+
+		gpio_pulse_in: pulse_in {
+			gpios = <&gpioa 0 GPIO_INPUT>;
+		};
+
+		gpio_observe_out: observe_out {
+			gpios = <&gpioc 5 GPIO_OUTPUT_HIGH>;
+		};
+	};
+
+	poc-leds-pwm {
+		compatible = "pwm-leds";
+		pwm_led0_green: pwm_led_0 {
+			pwms = <&pwmb 0 PWM_MSEC(20) PWM_POLARITY_INVERTED>;
+			label = "User D7 green";
+		};
+	};
+
+	hibernate_ctrl_psl: hibernate-ctrl-psl {
+		compatible = "npcx-hibernate-psl";
+		psl-driven-type = "fw-ctrl-driven";
+		status = "disabled";
+	};
+
+	/* Add specific region in linker script */
+	test_sram: memory@20010000 {
+		compatible = "zephyr,memory-region", "mmio-sram";
+		reg = <20010000 DT_SIZE_K(1)>;
+		zephyr,memory-region = "LP_RAM";
+	};
+};
+
+&cpu0 {
+	cpu-power-states = <&suspend_to_idle0 &suspend_to_idle1>;
+};
+
+/* Overwrite default device properties with overlays in board dt file here. */
+&uart1 {
+	status = "okay";
+	current-speed = <115200>;
+	/* Use UART1_SL2 ie. PIN64.65 */
+	pinctrl-0 = <&uart1_sin_gp87
+		     &uart1_sout_gp83>;
+	pinctrl-names = "default";
+};
+
+&pwmb {
+	status = "okay";
+	pinctrl-0 = <&pwmb_gp21>;
+	pinctrl-names = "default";
+};
+
+&espi0 {
+	status = "okay";
+	pinctrl-0 = <&espi_lpc_gp10_f7>;
+	pinctrl-names = "default";
+};
+
+/* Power switch logic input pads */
+&psl_in1_gpstb12 {
+	/* PSL_IN0 */
+	psl-in-mode = "edge";
+	psl-in-pol = "high-rising";
+};
+
+/* Power domain device controlled by PSL (Power Switch Logic) IO pads */
+&hibernate_ctrl_psl {
+	status = "okay";
+	pinctrl-0 = <&psl_in1_gpstb12>;
+	/*
+	 * Please notice PSL_FW_CTL_BIT must set to `active` before the
+	 * PSL_OUT_GPO is enabled to trigger PSL_OUT set to inactive.
+	 */
+	pinctrl-1 = <&psl_out_fw_high &psl_out_fw_ctl_en &psl_out_fw_low>;
+	pinctrl-names = "default", "hibernate";
+};
