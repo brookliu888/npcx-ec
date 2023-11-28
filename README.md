@@ -1,0 +1,1 @@
+# lnv-npcx-zephyr_cf40
