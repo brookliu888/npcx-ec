@@ -1,6 +1,0 @@
-# Copyright (c) 2022 Nuvoton Technology Corporation.
-# SPDX-License-Identifier: Apache-2.0
-
-config BOARD_NPCK3M7K_EVB
-	bool "Nuvoton NPCK3M7K POC Development board"
-	depends on SOC_NPCK3M7K

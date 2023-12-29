@@ -1,8 +1,0 @@
-"cmsis":"/home/bk911/projects/nvt/lenovo/modules/hal/cmsis":"${ZEPHYR_CMSIS_CMAKE_DIR}"
-"microchip":"/home/bk911/projects/nvt/lenovo/modules/hal/microchip":"/home/bk911/projects/nvt/lenovo/modules/hal/microchip"
-"atmel":"/home/bk911/projects/nvt/lenovo/modules/hal/atmel":"/home/bk911/projects/nvt/lenovo/modules/hal/atmel"
-"hal_espressif":"/home/bk911/projects/nvt/lenovo/modules/hal/espressif":"/home/bk911/projects/nvt/lenovo/modules/hal/espressif/zephyr"
-"hal_gigadevice":"/home/bk911/projects/nvt/lenovo/modules/hal/gigadevice":"${ZEPHYR_HAL_GIGADEVICE_CMAKE_DIR}"
-"nuvoton":"/home/bk911/projects/nvt/lenovo/modules/hal/nuvoton":"/home/bk911/projects/nvt/lenovo/modules/hal/nuvoton"
-"hal_nxp":"/home/bk911/projects/nvt/lenovo/modules/hal/nxp":"${ZEPHYR_HAL_NXP_CMAKE_DIR}"
-"stm32":"/home/bk911/projects/nvt/lenovo/modules/hal/stm32":"/home/bk911/projects/nvt/lenovo/modules/hal/stm32"
