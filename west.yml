@@ -25,4 +25,4 @@ manifest:
         - hal
 
   self:
-    path: npcx-zephyr
+    path: npcx-ec
